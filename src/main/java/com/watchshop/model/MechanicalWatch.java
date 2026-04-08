@@ -1,9 +1,9 @@
 package com.watchshop.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class MechanicalWatch extends Watch {
-    public MechanicalWatch(double price, Colour colour, Date storeArrivalDate) {
+    public MechanicalWatch(double price, Colour colour, LocalDate storeArrivalDate) {
         super(price, colour, storeArrivalDate);
     }
 }

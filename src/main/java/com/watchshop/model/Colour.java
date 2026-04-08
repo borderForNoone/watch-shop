@@ -1,5 +1,5 @@
 package com.watchshop.model;
 
 public enum Colour {
-    RED, BLUE
+    RED, BLACK, BLUE
 }

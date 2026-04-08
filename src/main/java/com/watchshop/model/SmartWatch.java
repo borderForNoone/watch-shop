@@ -1,10 +1,10 @@
 package com.watchshop.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class SmartWatch extends Watch {
 
-    public SmartWatch(double price, Colour colour, Date storeArrivalDate) {
+    public SmartWatch(double price, Colour colour, LocalDate storeArrivalDate) {
         super(price, colour, storeArrivalDate);
     }
 }

@@ -1,8 +1,9 @@
 package com.watchshop.service;
 
-import com.watchshop.model.Watch;
+import com.watchshop.model.*;
 import com.watchshop.repository.WatchRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class WatchService {
@@ -18,5 +19,47 @@ public class WatchService {
                 .toList();
     }
 
+    public List<Watch> sortByPrice() {
+        return watchRepository.getAll().stream()
+                .sorted(Comparator.comparing(Watch::getPrice))
+                .toList();
+    }
 
+    public List<Watch> sortByPriceDescending() {
+        return watchRepository.getAll().stream()
+                .sorted(Comparator.comparing(Watch::getPrice).reversed())
+                .toList();
+    }
+
+    public List<Watch> sortByColour() {
+        return watchRepository.getAll().stream()
+                .sorted(Comparator.comparing(w -> w.getColour().name()))
+                .toList();
+    }
+
+    public List<Watch> sortByArrivalDate() {
+        return watchRepository.getAll().stream()
+                .sorted(Comparator.comparing(Watch::getStoreArrivalDate))
+                .toList();
+    }
+
+    public List<Watch> sortByArrivalDateDescending() {
+        return watchRepository.getAll().stream()
+                .sorted(Comparator.comparing(Watch::getStoreArrivalDate).reversed())
+                .toList();
+    }
+
+    public List<Watch> getAllWatches() {
+        return watchRepository.getAll();
+    }
+
+    public void addWatch(Watch watch) {
+        watchRepository.addWatch(watch);
+    }
+
+    public double getTotalPrice() {
+        return watchRepository.getAll().stream()
+                .mapToDouble(Watch::getPrice)
+                .sum();
+    }
 }
