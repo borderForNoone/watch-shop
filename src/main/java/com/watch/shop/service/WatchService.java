@@ -1,7 +1,6 @@
 package com.watch.shop.service;
 
 import com.watch.shop.model.Watch;
-import com.watch.shop.model.*;
 import com.watch.shop.repository.WatchRepository;
 
 import java.util.Comparator;

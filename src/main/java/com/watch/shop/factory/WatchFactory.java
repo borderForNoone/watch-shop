@@ -1,6 +1,10 @@
 package com.watch.shop.factory;
 
-import com.watch.shop.model.*;
+import com.watch.shop.model.MechanicalWatch;
+import com.watch.shop.model.QuartzWatch;
+import com.watch.shop.model.SmartWatch;
+import com.watch.shop.model.SolarWatch;
+import com.watch.shop.model.Watch;
 import com.watch.shop.model.enums.Colour;
 import com.watch.shop.model.enums.WatchType;
 
