@@ -1,12 +1,14 @@
-package com.watchshop.model;
+package com.watch.shop.model;
+
+import com.watch.shop.model.enums.Colour;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Watch {
-     protected double price;
-     protected Colour colour;
-     protected LocalDate storeArrivalDate;
+    protected double price;
+    protected Colour colour;
+    protected LocalDate storeArrivalDate;
 
     public Watch(double price, Colour colour, LocalDate storeArrivalDate) {
         if (price == 0) throw new IllegalArgumentException("Price can't be zero");

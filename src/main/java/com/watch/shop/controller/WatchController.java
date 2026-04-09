@@ -1,7 +1,7 @@
-package com.watchshop.controller;
+package com.watch.shop.controller;
 
-import com.watchshop.model.Watch;
-import com.watchshop.service.WatchService;
+import com.watch.shop.model.Watch;
+import com.watch.shop.service.WatchService;
 
 import java.util.List;
 

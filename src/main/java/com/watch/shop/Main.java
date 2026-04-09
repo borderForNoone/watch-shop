@@ -1,13 +1,14 @@
-package com.watchshop;
+package com.watch.shop;
 
-import com.watchshop.controller.WatchController;
-import com.watchshop.model.Colour;
-import com.watchshop.model.MechanicalWatch;
-import com.watchshop.model.QuartzWatch;
-import com.watchshop.model.SmartWatch;
-import com.watchshop.repository.WatchRepository;
-import com.watchshop.service.WatchService;
-import com.watchshop.view.ConsoleView;
+import com.watch.shop.controller.WatchController;
+import com.watch.shop.factory.WatchFactory;
+import com.watch.shop.model.enums.Colour;
+import com.watch.shop.model.MechanicalWatch;
+import com.watch.shop.model.QuartzWatch;
+import com.watch.shop.model.SmartWatch;
+import com.watch.shop.repository.WatchRepository;
+import com.watch.shop.service.WatchService;
+import com.watch.shop.view.ConsoleView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,9 +22,10 @@ public class Main {
         repository.addWatch(new MechanicalWatch(5000.0, Colour.BLACK, LocalDate.of(2023, 11, 5)));
         repository.addWatch(new SmartWatch(4500.0, Colour.BLACK, LocalDate.of(2024, 5, 18)));
 
+        WatchFactory watchFactory = new WatchFactory();
         WatchService service = new WatchService(repository);
         WatchController controller = new WatchController(service);
-        ConsoleView view = new ConsoleView(controller);
+        ConsoleView view = new ConsoleView(controller, watchFactory);
 
         view.start();
     }

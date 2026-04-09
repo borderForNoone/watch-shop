@@ -1,6 +1,6 @@
-package com.watchshop.repository;
+package com.watch.shop.repository;
 
-import com.watchshop.model.Watch;
+import com.watch.shop.model.Watch;
 
 import java.util.List;
 

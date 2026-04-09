@@ -1,4 +1,6 @@
-package com.watchshop.model;
+package com.watch.shop.model;
+
+import com.watch.shop.model.enums.Colour;
 
 import java.time.LocalDate;
 
