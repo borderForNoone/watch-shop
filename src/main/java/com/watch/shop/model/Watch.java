@@ -11,11 +11,6 @@ public abstract class Watch {
     protected LocalDate storeArrivalDate;
 
     public Watch(double price, Colour colour, LocalDate storeArrivalDate) {
-        if (price == 0) throw new IllegalArgumentException("Price can't be zero");
-        if (price < 0) throw new IllegalArgumentException("Price can't be negative");
-        if (colour == null) throw new IllegalArgumentException("Colour can't be null");
-        if (storeArrivalDate == null) throw new IllegalArgumentException("Date can't be null");
-
         this.price = price;
         this.colour = colour;
         this.storeArrivalDate = storeArrivalDate;

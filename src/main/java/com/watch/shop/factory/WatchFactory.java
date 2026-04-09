@@ -7,6 +7,7 @@ import com.watch.shop.model.SolarWatch;
 import com.watch.shop.model.Watch;
 import com.watch.shop.model.enums.Colour;
 import com.watch.shop.model.enums.WatchType;
+import com.watch.shop.validation.WatchValidator;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class WatchFactory {
     }
 
     public Watch create(WatchType type, double price, Colour colour) {
+        WatchValidator.validate(price, colour, LocalDate.now());
+
         return switch (type) {
             case QUARTZ -> new QuartzWatch(price, colour, LocalDate.now());
             case MECHANICAL -> new MechanicalWatch(price, colour, LocalDate.now());
