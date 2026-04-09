@@ -17,10 +17,37 @@ public class Main {
     public static void main(String[] args) {
         WatchRepository repository = new WatchRepository(new ArrayList<>());
 
-        repository.addWatch(new QuartzWatch(1500.0, Colour.RED, LocalDate.of(2024, 1, 15)));
-        repository.addWatch(new QuartzWatch(2200.0, Colour.BLUE, LocalDate.of(2024, 3, 10)));
-        repository.addWatch(new MechanicalWatch(5000.0, Colour.BLACK, LocalDate.of(2023, 11, 5)));
-        repository.addWatch(new SmartWatch(4500.0, Colour.BLACK, LocalDate.of(2024, 5, 18)));
+        repository.addWatch(new QuartzWatch.Builder()
+                .price(1500.0)
+                .colour(Colour.RED)
+                .storeArrivalDate(LocalDate.of(2024, 1, 15))
+                .manufacturer("Omega")
+                .model("1.0.1")
+                .build());
+
+        repository.addWatch(new QuartzWatch.Builder()
+                .price(2200.0)
+                .colour(Colour.BLUE)
+                .storeArrivalDate(LocalDate.of(2024, 3, 10))
+                .manufacturer("Omega")
+                .model("1.0.1")
+                .build());
+
+        repository.addWatch(new MechanicalWatch.Builder()
+                .price(5000.0)
+                .colour(Colour.BLACK)
+                .storeArrivalDate(LocalDate.of(2023, 11, 5))
+                .manufacturer("Omega")
+                .model("1.0.1")
+                .build());
+
+        repository.addWatch(new SmartWatch.Builder()
+                .price(4500.0)
+                .colour(Colour.BLACK)
+                .storeArrivalDate(LocalDate.of(2024, 5, 18))
+                .manufacturer("Omega")
+                .model("1.0.1")
+                .build());
 
         WatchFactory watchFactory = new WatchFactory();
         WatchService service = new WatchService(repository);

@@ -1,12 +1,20 @@
 package com.watch.shop.model;
 
-import com.watch.shop.model.enums.Colour;
-
-import java.time.LocalDate;
-
 public class SmartWatch extends Watch {
 
-    public SmartWatch(double price, Colour colour, LocalDate storeArrivalDate) {
-        super(price, colour, storeArrivalDate);
+    private SmartWatch(SmartWatch.Builder builder) {
+        super(builder);
+    }
+
+    public static class Builder extends Watch.Builder<SmartWatch.Builder> {
+        @Override
+        protected SmartWatch.Builder self() {
+            return this;
+        }
+
+        @Override
+        public SmartWatch build() {
+            return new SmartWatch(this);
+        }
     }
 }

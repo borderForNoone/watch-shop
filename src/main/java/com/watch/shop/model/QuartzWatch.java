@@ -1,11 +1,20 @@
 package com.watch.shop.model;
 
-import com.watch.shop.model.enums.Colour;
-
-import java.time.LocalDate;
-
 public class QuartzWatch extends Watch {
-    public QuartzWatch(double price, Colour colour, LocalDate storeArrivalDate) {
-        super(price, colour, storeArrivalDate);
+
+    private QuartzWatch(Builder builder) {
+        super(builder);
+    }
+
+    public static class Builder extends Watch.Builder<Builder> {
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        @Override
+        public QuartzWatch build() {
+            return new QuartzWatch(this);
+        }
     }
 }

@@ -33,14 +33,38 @@ public class ConsoleView {
         }
     }
 
+    private String readManufacturer() {
+        while (true) {
+            System.out.print("Введіть виробника: ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            System.out.println("Помилка: виробник не може бути порожнім");
+        }
+    }
+
+    private String readModel() {
+        while (true) {
+            System.out.print("Введіть модель: ");
+            String input = scanner.nextLine().trim();
+            if (!input.isEmpty()) {
+                return input;
+            }
+            System.out.println("Помилка: модель не може бути порожньою");
+        }
+    }
+
     public void addNewWatch() {
         while (true) {
             try {
                 WatchType type = readType();
                 Colour colour = readColour();
                 double price = readPrice();
+                String manufacturer = readManufacturer();
+                String model = readModel();
 
-                Watch watch = watchFactory.create(type, price, colour);
+                Watch watch = watchFactory.create(type, price, colour, manufacturer, model);
 
                 watchController.addWatch(watch);
                 System.out.println("Годинник додано!");

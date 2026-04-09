@@ -5,7 +5,20 @@ import com.watch.shop.model.enums.Colour;
 import java.time.LocalDate;
 
 public class SolarWatch extends Watch {
-    public SolarWatch(double price, Colour colour, LocalDate storeArrivalDate) {
-        super(price, colour, storeArrivalDate);
+
+    private SolarWatch(SolarWatch.Builder builder) {
+        super(builder);
+    }
+
+    public static class Builder extends Watch.Builder<SolarWatch.Builder> {
+        @Override
+        protected SolarWatch.Builder self() {
+            return this;
+        }
+
+        @Override
+        public SolarWatch build() {
+            return new SolarWatch(this);
+        }
     }
 }
