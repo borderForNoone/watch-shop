@@ -3,6 +3,7 @@ package com.watch.shop.controller;
 import com.watch.shop.model.Watch;
 import com.watch.shop.service.WatchService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class WatchController {
@@ -44,7 +45,7 @@ public class WatchController {
         return watchService.sortByColour();
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return watchService.getTotalPrice();
     }
 }

@@ -6,6 +6,7 @@ import com.watch.shop.model.Watch;
 import com.watch.shop.model.enums.Colour;
 import com.watch.shop.model.enums.WatchType;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -60,7 +61,7 @@ public class ConsoleView {
             try {
                 WatchType type = readType();
                 Colour colour = readColour();
-                double price = readPrice();
+                BigDecimal price = readPrice();
                 String manufacturer = readManufacturer();
                 String model = readModel();
 
@@ -105,16 +106,15 @@ public class ConsoleView {
         }
     }
 
-    private double readPrice() {
+    private BigDecimal readPrice() {
         while (true) {
             try {
                 System.out.print("Ціна: ");
-                double price = Double.parseDouble(scanner.nextLine());
+                String input = scanner.nextLine();
+                BigDecimal price = new BigDecimal(input);
                 return price;
             } catch (NumberFormatException e) {
                 System.out.println("Помилка: введіть число");
-            } catch (IllegalArgumentException e) {
-                System.out.println("Помилка: " + e.getMessage());
             }
         }
     }

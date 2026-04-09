@@ -9,11 +9,12 @@ import com.watch.shop.model.enums.Colour;
 import com.watch.shop.model.enums.WatchType;
 import com.watch.shop.validation.WatchValidator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class WatchFactory {
 
-    public Watch create(WatchType type, double price, Colour colour, String manufacturer, String model) {
+    public Watch create(WatchType type, BigDecimal price, Colour colour, String manufacturer, String model) {
         WatchValidator.validate(price, colour, LocalDate.now(), manufacturer, model);
 
         return switch (type) {

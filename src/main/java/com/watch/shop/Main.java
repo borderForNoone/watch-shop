@@ -10,6 +10,7 @@ import com.watch.shop.repository.WatchRepository;
 import com.watch.shop.service.WatchService;
 import com.watch.shop.view.ConsoleView;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class Main {
         WatchRepository repository = new WatchRepository(new ArrayList<>());
 
         repository.addWatch(new QuartzWatch.Builder()
-                .price(1500.0)
+                .price(BigDecimal.valueOf(1500.0))
                 .colour(Colour.RED)
                 .storeArrivalDate(LocalDate.of(2024, 1, 15))
                 .manufacturer("Omega")
@@ -26,7 +27,7 @@ public class Main {
                 .build());
 
         repository.addWatch(new QuartzWatch.Builder()
-                .price(2200.0)
+                .price(BigDecimal.valueOf(2200.0))
                 .colour(Colour.BLUE)
                 .storeArrivalDate(LocalDate.of(2024, 3, 10))
                 .manufacturer("Omega")
@@ -34,7 +35,7 @@ public class Main {
                 .build());
 
         repository.addWatch(new MechanicalWatch.Builder()
-                .price(5000.0)
+                .price(BigDecimal.valueOf(5000.0))
                 .colour(Colour.BLACK)
                 .storeArrivalDate(LocalDate.of(2023, 11, 5))
                 .manufacturer("Omega")
@@ -42,7 +43,7 @@ public class Main {
                 .build());
 
         repository.addWatch(new SmartWatch.Builder()
-                .price(4500.0)
+                .price(BigDecimal.valueOf(4500.0))
                 .colour(Colour.BLACK)
                 .storeArrivalDate(LocalDate.of(2024, 5, 18))
                 .manufacturer("Omega")

@@ -2,11 +2,12 @@ package com.watch.shop.model;
 
 import com.watch.shop.model.enums.Colour;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public abstract class Watch {
-    protected double price;
+    protected BigDecimal price;
     protected Colour colour;
     protected LocalDate storeArrivalDate;
     private final String manufacturer;
@@ -20,7 +21,7 @@ public abstract class Watch {
         this.model = builder.model;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
@@ -51,11 +52,12 @@ public abstract class Watch {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Watch watch = (Watch) o;
-        return Double.compare(price, watch.price) == 0 &&
-                colour == watch.colour &&
-                Objects.equals(storeArrivalDate, watch.storeArrivalDate) &&
-                Objects.equals(manufacturer, watch.manufacturer) &&
-                Objects.equals(model, watch.model);
+
+        return (price == null ? watch.price == null : price.compareTo(watch.price) == 0)
+                && colour == watch.colour
+                && Objects.equals(storeArrivalDate, watch.storeArrivalDate)
+                && Objects.equals(manufacturer, watch.manufacturer)
+                && Objects.equals(model, watch.model);
     }
 
     @Override
@@ -64,13 +66,13 @@ public abstract class Watch {
     }
 
     public static abstract class Builder<T extends Builder<T>> {
-        private double price;
+        private BigDecimal price;
         private Colour colour;
         private LocalDate storeArrivalDate;
         private String manufacturer;
         private String model;
 
-        public T price(double price) {
+        public T price(BigDecimal price) {
             this.price = price;
             return self();
         }

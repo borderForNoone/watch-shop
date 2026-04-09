@@ -3,6 +3,7 @@ package com.watch.shop.service;
 import com.watch.shop.model.Watch;
 import com.watch.shop.repository.WatchRepository;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
@@ -57,9 +58,9 @@ public class WatchService {
         watchRepository.addWatch(watch);
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return watchRepository.getAll().stream()
-                .mapToDouble(Watch::getPrice)
-                .sum();
+                .map(Watch::getPrice)  // BigDecimal
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
