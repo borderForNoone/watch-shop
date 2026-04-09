@@ -156,7 +156,9 @@ public class ConsoleView {
             printMenu();
             String choice = scanner.nextLine();
 
-            if (!handleMenuChoice(choice)) break;
+            if (!handleMenuChoice(choice)) {
+                break;
+            }
         }
     }
 
