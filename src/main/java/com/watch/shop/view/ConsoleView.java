@@ -21,76 +21,33 @@ public class ConsoleView {
         this.watchFactory = watchFactory;
     }
 
-    public void printOutAllWatches() {
-        List<Watch> watches = watchController.getAllWatches();
-
-        if (watches.isEmpty()) {
-            System.out.println("Магазин порожній");
-            return;
-        }
-
-        for (Watch watch : watches) {
-            System.out.println(watch);
+    private void print(Object obj) {
+        if (obj instanceof List<?> list) {
+            list.forEach(System.out::println);
+        } else {
+            System.out.println(obj);
         }
     }
 
-    private String readManufacturer() {
+    private String readNonEmptyString(String prompt) {
         while (true) {
-            System.out.print("Введіть виробника: ");
+            System.out.print(prompt);
             String input = scanner.nextLine().trim();
-            if (!input.isEmpty()) {
-                return input;
-            }
-            System.out.println("Помилка: виробник не може бути порожнім");
-        }
-    }
-
-    private String readModel() {
-        while (true) {
-            System.out.print("Введіть модель: ");
-            String input = scanner.nextLine().trim();
-            if (!input.isEmpty()) {
-                return input;
-            }
-            System.out.println("Помилка: модель не може бути порожньою");
-        }
-    }
-
-    public void addNewWatch() {
-        while (true) {
-            try {
-                WatchType type = readType();
-                Colour colour = readColour();
-                BigDecimal price = readPrice();
-                String manufacturer = readManufacturer();
-                String model = readModel();
-
-                Watch watch = watchFactory.create(type, price, colour, manufacturer, model);
-
-                watchController.addWatch(watch);
-                System.out.println("Годинник додано!");
-                break;
-
-            } catch (IllegalArgumentException e) {
-                System.out.println("Помилка: " + e.getMessage());
-            }
+            if (!input.isEmpty()) return input;
+            print("Помилка: поле не може бути порожнім");
         }
     }
 
     private WatchType readType() {
         while (true) {
             try {
-                System.out.println("Оберіть тип годинника:");
+                print("Оберіть тип годинника:");
                 Arrays.stream(WatchType.values())
                         .forEach(type -> System.out.printf("%s. %s%n", type.getCode(), type.name()));
-
-                System.out.print("Ваш вибір: ");
                 String input = scanner.nextLine();
-
                 return WatchType.fromCode(input);
-
             } catch (IllegalArgumentException e) {
-                System.out.println("Помилка: невідомий тип, спробуйте ще раз");
+                print("Помилка: невідомий тип, спробуйте ще раз");
             }
         }
     }
@@ -101,7 +58,7 @@ public class ConsoleView {
                 System.out.print("Колір " + Arrays.toString(Colour.values()) + ": ");
                 return Colour.valueOf(scanner.nextLine().toUpperCase());
             } catch (IllegalArgumentException e) {
-                System.out.println("Помилка: невідомий колір, спробуйте ще раз");
+                print("Помилка: невідомий колір, спробуйте ще раз");
             }
         }
     }
@@ -110,79 +67,103 @@ public class ConsoleView {
         while (true) {
             try {
                 System.out.print("Ціна: ");
-                String input = scanner.nextLine();
-                BigDecimal price = new BigDecimal(input);
-                return price;
+                return new BigDecimal(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("Помилка: введіть число");
+                print("Помилка: введіть число");
+            }
+        }
+    }
+
+    public void addNewWatch() {
+        while (true) {
+            try {
+                WatchType type = readType();
+                Colour colour = readColour();
+                BigDecimal price = readPrice();
+                String manufacturer = readNonEmptyString("Введіть виробника: ");
+                String model = readNonEmptyString("Введіть модель: ");
+
+                Watch watch = watchFactory.create(type, price, colour, manufacturer, model);
+                watchController.addWatch(watch);
+                print("Годинник додано!");
+                break;
+            } catch (IllegalArgumentException e) {
+                print("Помилка: " + e.getMessage());
             }
         }
     }
 
     private String readSortOption() {
-        System.out.println("Сортувати за:");
-        System.out.println("1. Ціною");
-        System.out.println("2. Кольором");
-        System.out.println("3. Датою надходження");
-        System.out.print("Ваш вибір: ");
-
+        print("Сортувати за:\n1. Ціною\n2. Кольором\n3. Датою надходження\nВаш вибір: ");
         return scanner.nextLine();
     }
 
     public void printSortedWatches() {
         String choice = readSortOption();
-        List<Watch> sorted = getSortedWatches(choice);
-        sorted.forEach(System.out::println);
-    }
-
-    private List<Watch> getSortedWatches(String choice) {
-        return switch (choice) {
+        List<Watch> sorted = switch (choice) {
             case "1" -> watchController.sortByPrice();
             case "2" -> watchController.sortByColour();
             case "3" -> watchController.sortByArrivalDate();
             default -> {
-                System.out.println("Невідома команда");
+                print("Невідома команда");
                 yield List.of();
             }
         };
+        print(sorted);
     }
 
     public void printTotalPrice() {
-        System.out.printf("Загальна вартість: %.2f%n", watchController.getTotalPrice());
+        print(String.format("Загальна вартість: %.2f", watchController.getTotalPrice()));
+    }
+
+    public void printOutAllWatches() {
+        List<Watch> watches = watchController.getAllWatches();
+        if (watches.isEmpty()) {
+            print("Магазин порожній");
+        } else {
+            print(watches);
+        }
     }
 
     public void start() {
         while (true) {
             printMenu();
-            String choice = scanner.nextLine();
-
-            if (!handleMenuChoice(choice)) {
-                break;
-            }
+            if (!handleMenuChoice(scanner.nextLine())) break;
         }
     }
 
     private void printMenu() {
-        System.out.println("\n=== Магазин годинників ===");
-        System.out.println("1. Показати всі годинники");
-        System.out.println("2. Додати годинник");
-        System.out.println("3. Сортувати годинники");
-        System.out.println("4. Загальна вартість");
-        System.out.println("0. Вийти");
-        System.out.print("Ваш вибір: ");
+        print("\n=== Магазин годинників ===\n" +
+                "1. Показати всі годинники\n" +
+                "2. Додати годинник\n" +
+                "3. Сортувати годинники\n" +
+                "4. Загальна вартість\n" +
+                "0. Вийти\nВаш вибір: ");
     }
 
     private boolean handleMenuChoice(String choice) {
-        switch (choice) {
-            case "1" -> printOutAllWatches();
-            case "2" -> addNewWatch();
-            case "3" -> printSortedWatches();
-            case "4" -> printTotalPrice();
-            case "0" -> {
-                return false;
+        return switch (choice) {
+            case "1" -> {
+                printOutAllWatches();
+                yield true;
             }
-            default -> System.out.println("Невідома команда");
-        }
-        return true;
+            case "2" -> {
+                addNewWatch();
+                yield true;
+            }
+            case "3" -> {
+                printSortedWatches();
+                yield true;
+            }
+            case "4" -> {
+                printTotalPrice();
+                yield true;
+            }
+            case "0" -> false;
+            default -> {
+                print("Невідома команда");
+                yield true;
+            }
+        };
     }
 }
