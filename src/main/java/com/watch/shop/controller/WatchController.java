@@ -28,7 +28,9 @@ public class WatchController {
     public void run() {
         while (true) {
             view.printMenu();
-            if (!handleMenuChoice(view.readLine())) break;
+            if (!handleMenuChoice(view.readLine())) {
+                break;
+            }
         }
     }
 

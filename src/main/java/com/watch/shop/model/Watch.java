@@ -50,8 +50,12 @@ public abstract class Watch {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Watch watch = (Watch) o;
 
         return (price == null ? watch.price == null : price.compareTo(watch.price) == 0)
