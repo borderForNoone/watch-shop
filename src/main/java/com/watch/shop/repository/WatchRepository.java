@@ -1,5 +1,6 @@
 package com.watch.shop.repository;
 
+import com.watch.shop.data.WatchTestDataGenerator;
 import com.watch.shop.model.Watch;
 
 import java.util.List;
@@ -7,8 +8,9 @@ import java.util.List;
 public class WatchRepository {
     private final List<Watch> watches;
 
-    public WatchRepository(List<Watch> watches) {
-        this.watches = watches;
+    public WatchRepository() {
+        WatchTestDataGenerator generator = new WatchTestDataGenerator();
+        this.watches = generator.retrieveGeneratedData();
     }
 
     public void addWatch(Watch watch) {

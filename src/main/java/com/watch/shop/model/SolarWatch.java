@@ -1,14 +1,29 @@
 package com.watch.shop.model;
 
 public class SolarWatch extends Watch {
+    private final int batteryCapacity;
 
-    private SolarWatch(SolarWatch.Builder builder) {
+    private SolarWatch(Builder builder) {
         super(builder);
+        this.batteryCapacity = builder.batteryCapacity;
     }
 
-    public static class Builder extends Watch.Builder<SolarWatch.Builder> {
+    @Override
+    public String toString() {
+        return super.toString() +
+                String.format(" | Battery Capacity: %dmAh", batteryCapacity);
+    }
+
+    public static class Builder extends Watch.Builder<Builder> {
+        private int batteryCapacity;
+
+        public Builder batteryCapacity(int batteryCapacity) {
+            this.batteryCapacity = batteryCapacity;
+            return this;
+        }
+
         @Override
-        protected SolarWatch.Builder self() {
+        protected Builder self() {
             return this;
         }
 

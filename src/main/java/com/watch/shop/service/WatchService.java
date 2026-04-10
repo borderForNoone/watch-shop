@@ -51,7 +51,7 @@ public class WatchService {
     }
 
     public List<Watch> getAllWatches() {
-        return watchRepository.getAll();
+        return List.copyOf(watchRepository.getAll());
     }
 
     public void addWatch(Watch watch) {
@@ -60,7 +60,7 @@ public class WatchService {
 
     public BigDecimal getTotalPrice() {
         return watchRepository.getAll().stream()
-                .map(Watch::getPrice)  // BigDecimal
+                .map(Watch::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

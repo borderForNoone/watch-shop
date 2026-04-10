@@ -1,6 +1,7 @@
 package com.watch.shop.model;
 
 import com.watch.shop.model.enums.Colour;
+import com.watch.shop.model.enums.Manufacturer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,8 +11,8 @@ public abstract class Watch {
     protected BigDecimal price;
     protected Colour colour;
     protected LocalDate storeArrivalDate;
-    private final String manufacturer;
-    private final String model;
+    protected final Manufacturer manufacturer;
+    protected final String model;
 
     protected Watch(Builder<?> builder) {
         this.price = builder.price;
@@ -33,7 +34,7 @@ public abstract class Watch {
         return storeArrivalDate;
     }
 
-    public String getManufacturer() {
+    public Manufacturer getManufacturer() {
         return manufacturer;
     }
 
@@ -69,7 +70,7 @@ public abstract class Watch {
         private BigDecimal price;
         private Colour colour;
         private LocalDate storeArrivalDate;
-        private String manufacturer;
+        private Manufacturer manufacturer;
         private String model;
 
         public T price(BigDecimal price) {
@@ -87,7 +88,7 @@ public abstract class Watch {
             return self();
         }
 
-        public T manufacturer(String manufacturer) {
+        public T manufacturer(Manufacturer manufacturer) {
             this.manufacturer = manufacturer;
             return self();
         }

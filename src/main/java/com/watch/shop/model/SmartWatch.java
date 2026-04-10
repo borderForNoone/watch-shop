@@ -1,14 +1,39 @@
 package com.watch.shop.model;
 
-public class SmartWatch extends Watch {
+import com.watch.shop.model.enums.OperatingSystem;
 
-    private SmartWatch(SmartWatch.Builder builder) {
+public class SmartWatch extends Watch {
+    private final OperatingSystem os;
+    private final boolean hasGPS;
+
+    private SmartWatch(Builder builder) {
         super(builder);
+        this.os = builder.os;
+        this.hasGPS = builder.hasGPS;
     }
 
-    public static class Builder extends Watch.Builder<SmartWatch.Builder> {
+    @Override
+    public String toString() {
+        return super.toString() +
+                String.format(" | OS: %s | GPS: %s", os, hasGPS ? "Yes" : "No");
+    }
+
+    public static class Builder extends Watch.Builder<Builder> {
+        private OperatingSystem os;
+        private boolean hasGPS;
+
+        public Builder os(OperatingSystem os) {
+            this.os = os;
+            return this;
+        }
+
+        public Builder hasGPS(boolean hasGPS) {
+            this.hasGPS = hasGPS;
+            return this;
+        }
+
         @Override
-        protected SmartWatch.Builder self() {
+        protected Builder self() {
             return this;
         }
 

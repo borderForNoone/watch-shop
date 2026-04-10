@@ -1,10 +1,9 @@
 package com.watch.shop.view;
 
-import com.watch.shop.controller.WatchController;
-import com.watch.shop.factory.WatchFactory;
 import com.watch.shop.model.Watch;
 import com.watch.shop.model.enums.Colour;
 import com.watch.shop.model.enums.WatchType;
+import com.watch.shop.view.messages.Messages;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -12,158 +11,126 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleView {
-    private final WatchController watchController;
     private final Scanner scanner = new Scanner(System.in);
-    private final WatchFactory watchFactory;
 
-    public ConsoleView(WatchController watchController, WatchFactory watchFactory) {
-        this.watchController = watchController;
-        this.watchFactory = watchFactory;
+    public void printMessage(String message) {
+        System.out.println(message);
     }
 
-    private void print(Object obj) {
-        if (obj instanceof List<?> list) {
-            list.forEach(System.out::println);
+    public void printWatches(List<Watch> watches) {
+        if (watches.isEmpty()) {
+            System.out.println(Messages.STORE_EMPTY);
         } else {
-            System.out.println(obj);
+            watches.forEach(System.out::println);
         }
     }
 
-    private String readNonEmptyString(String prompt) {
+    public void printMenu() {
+        System.out.println(String.join("\n",
+                "", Messages.MENU_HEADER,
+                Messages.MENU_SHOW_ALL,
+                Messages.MENU_ADD,
+                Messages.MENU_SORT,
+                Messages.MENU_TOTAL,
+                Messages.MENU_EXIT,
+                Messages.MENU_CHOICE
+        ));
+    }
+
+
+    public void printSortMenu() {
+        System.out.println(String.join("\n",
+                Messages.SORT_HEADER,
+                Messages.SORT_BY_PRICE,
+                Messages.SORT_BY_COLOR,
+                Messages.SORT_BY_DATE
+        ));
+    }
+
+    public void printWatchTypeMenu(WatchType[] types) {
+        System.out.println(Messages.PROMPT_WATCH_TYPE);
+        Arrays.stream(types)
+                .forEach(t -> System.out.printf("%s. %s%n", t.getCode(), t.name()));
+    }
+
+    public String readLine() {
+        return scanner.nextLine().trim();
+    }
+
+    public String readNonEmptyString(String prompt) {
         while (true) {
             System.out.print(prompt);
             String input = scanner.nextLine().trim();
-            if (!input.isEmpty()) return input;
-            print("Помилка: поле не може бути порожнім");
+            if (!input.isEmpty()) {
+                return input;
+            }
+            printMessage(Messages.ERR_EMPTY_FIELD);
         }
     }
 
-    private WatchType readType() {
+    public <T extends Enum<T>> T readEnum(Class<T> enumClass, String prompt) {
         while (true) {
             try {
-                print("Оберіть тип годинника:");
-                Arrays.stream(WatchType.values())
-                        .forEach(type -> System.out.printf("%s. %s%n", type.getCode(), type.name()));
-                String input = scanner.nextLine();
-                return WatchType.fromCode(input);
+                System.out.print(prompt + " " + Arrays.toString(enumClass.getEnumConstants()) + ": ");
+                return Enum.valueOf(enumClass, scanner.nextLine().toUpperCase());
             } catch (IllegalArgumentException e) {
-                print("Помилка: невідомий тип, спробуйте ще раз");
+                printMessage(Messages.ERR_INVALID_VALUE);
             }
         }
     }
 
-    private Colour readColour() {
+    public BigDecimal readPrice() {
         while (true) {
             try {
-                System.out.print("Колір " + Arrays.toString(Colour.values()) + ": ");
-                return Colour.valueOf(scanner.nextLine().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                print("Помилка: невідомий колір, спробуйте ще раз");
-            }
-        }
-    }
-
-    private BigDecimal readPrice() {
-        while (true) {
-            try {
-                System.out.print("Ціна: ");
+                System.out.print(Messages.PROMPT_PRICE);
                 return new BigDecimal(scanner.nextLine());
             } catch (NumberFormatException e) {
-                print("Помилка: введіть число");
+                printMessage(Messages.ERR_NOT_A_NUMBER);
             }
         }
     }
 
-    public void addNewWatch() {
+    public int readInt(String prompt) {
         while (true) {
             try {
-                WatchType type = readType();
-                Colour colour = readColour();
-                BigDecimal price = readPrice();
-                String manufacturer = readNonEmptyString("Введіть виробника: ");
-                String model = readNonEmptyString("Введіть модель: ");
-
-                Watch watch = watchFactory.create(type, price, colour, manufacturer, model);
-                watchController.addWatch(watch);
-                print("Годинник додано!");
-                break;
-            } catch (IllegalArgumentException e) {
-                print("Помилка: " + e.getMessage());
+                System.out.print(prompt);
+                return Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                printMessage(Messages.ERR_NOT_AN_INT);
             }
         }
     }
 
-    private String readSortOption() {
-        print("Сортувати за:\n1. Ціною\n2. Кольором\n3. Датою надходження\nВаш вибір: ");
-        return scanner.nextLine();
-    }
-
-    public void printSortedWatches() {
-        String choice = readSortOption();
-        List<Watch> sorted = switch (choice) {
-            case "1" -> watchController.sortByPrice();
-            case "2" -> watchController.sortByColour();
-            case "3" -> watchController.sortByArrivalDate();
-            default -> {
-                print("Невідома команда");
-                yield List.of();
-            }
-        };
-        print(sorted);
-    }
-
-    public void printTotalPrice() {
-        print(String.format("Загальна вартість: %.2f", watchController.getTotalPrice()));
-    }
-
-    public void printOutAllWatches() {
-        List<Watch> watches = watchController.getAllWatches();
-        if (watches.isEmpty()) {
-            print("Магазин порожній");
-        } else {
-            print(watches);
-        }
-    }
-
-    public void start() {
+    public boolean readBoolean(String prompt) {
         while (true) {
-            printMenu();
-            if (!handleMenuChoice(scanner.nextLine())) break;
+            System.out.print(prompt);
+            String input = scanner.nextLine().toLowerCase();
+            if (input.equals("true") || input.equals("false")) {
+                return Boolean.parseBoolean(input);
+            }
+            printMessage(Messages.ERR_BOOL_EXPECTED);
         }
     }
 
-    private void printMenu() {
-        print("\n=== Магазин годинників ===\n" +
-                "1. Показати всі годинники\n" +
-                "2. Додати годинник\n" +
-                "3. Сортувати годинники\n" +
-                "4. Загальна вартість\n" +
-                "0. Вийти\nВаш вибір: ");
+    public WatchType readWatchType(WatchType[] types) {
+        while (true) {
+            try {
+                printWatchTypeMenu(types);
+                return WatchType.fromCode(scanner.nextLine());
+            } catch (IllegalArgumentException e) {
+                printMessage(Messages.ERR_UNKNOWN_TYPE);
+            }
+        }
     }
 
-    private boolean handleMenuChoice(String choice) {
-        return switch (choice) {
-            case "1" -> {
-                printOutAllWatches();
-                yield true;
+    public Colour readColour() {
+        while (true) {
+            try {
+                System.out.print(Messages.PROMPT_COLOR + Arrays.toString(Colour.values()) + ": ");
+                return Colour.valueOf(scanner.nextLine().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                printMessage(Messages.ERR_UNKNOWN_COLOR);
             }
-            case "2" -> {
-                addNewWatch();
-                yield true;
-            }
-            case "3" -> {
-                printSortedWatches();
-                yield true;
-            }
-            case "4" -> {
-                printTotalPrice();
-                yield true;
-            }
-            case "0" -> false;
-            default -> {
-                print("Невідома команда");
-                yield true;
-            }
-        };
+        }
     }
 }
