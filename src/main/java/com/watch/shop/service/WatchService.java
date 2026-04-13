@@ -1,7 +1,9 @@
 package com.watch.shop.service;
 
+import com.watch.shop.factory.WatchFactory;
 import com.watch.shop.model.Watch;
 import com.watch.shop.repository.WatchRepository;
+import com.watch.shop.validation.WatchValidator;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -55,6 +57,13 @@ public class WatchService {
     }
 
     public void addWatch(Watch watch) {
+        WatchValidator.validate(
+                watch.getPrice(),
+                watch.getColour(),
+                watch.getStoreArrivalDate(),
+                watch.getManufacturer(),
+                watch.getModel()
+        );
         watchRepository.addWatch(watch);
     }
 

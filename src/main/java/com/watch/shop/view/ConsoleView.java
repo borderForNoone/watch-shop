@@ -1,7 +1,12 @@
 package com.watch.shop.view;
 
+import com.watch.shop.factory.WatchFactory;
 import com.watch.shop.model.Watch;
+import com.watch.shop.model.enums.BatteryType;
 import com.watch.shop.model.enums.Colour;
+import com.watch.shop.model.enums.Manufacturer;
+import com.watch.shop.model.enums.MechanismType;
+import com.watch.shop.model.enums.OperatingSystem;
 import com.watch.shop.model.enums.WatchType;
 import com.watch.shop.view.messages.Messages;
 
@@ -10,7 +15,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class ConsoleView {
+import static com.watch.shop.view.messages.Messages.ERR_INVALID_VALUE;
+import static com.watch.shop.view.messages.Messages.PROMPT_BATTERY;
+import static com.watch.shop.view.messages.Messages.PROMPT_CAPACITY;
+import static com.watch.shop.view.messages.Messages.PROMPT_GPS;
+import static com.watch.shop.view.messages.Messages.PROMPT_MANUFACTURER;
+import static com.watch.shop.view.messages.Messages.PROMPT_MECHANISM;
+import static com.watch.shop.view.messages.Messages.PROMPT_MODEL;
+import static com.watch.shop.view.messages.Messages.PROMPT_OS;
+import static com.watch.shop.view.messages.Messages.PROMPT_POWER_RES;
+
+public class ConsoleView implements WatchView {
     private final Scanner scanner = new Scanner(System.in);
 
     public void printMessage(String message) {
@@ -57,6 +72,41 @@ public class ConsoleView {
         return scanner.nextLine().trim();
     }
 
+    public Watch buildWatch(WatchFactory factory) {
+        while (true) {
+            try {
+                WatchType type = readWatchType(WatchType.values());
+                Colour colour = readColour();
+                BigDecimal price = readPrice();
+                Manufacturer manufacturer = readEnum(Manufacturer.class, PROMPT_MANUFACTURER);
+                String model = readNonEmptyString(PROMPT_MODEL);
+
+                return switch (type) {
+                    case SMART -> {
+                        OperatingSystem os = readEnum(OperatingSystem.class, PROMPT_OS);
+                        boolean hasGPS = readBoolean(PROMPT_GPS);
+                        yield factory.createSmartWatch(price, colour, manufacturer, model, os, hasGPS);
+                    }
+                    case QUARTZ -> {
+                        BatteryType battery = readEnum(BatteryType.class, PROMPT_BATTERY);
+                        yield factory.createQuartzWatch(price, colour, manufacturer, model, battery);
+                    }
+                    case MECHANICAL -> {
+                        int reserve = readInt(PROMPT_POWER_RES);
+                        MechanismType mech = readEnum(MechanismType.class, PROMPT_MECHANISM);
+                        yield factory.createMechanicalWatch(price, colour, manufacturer, model, reserve, mech);
+                    }
+                    case SOLAR -> {
+                        int capacity = readInt(PROMPT_CAPACITY);
+                        yield factory.createSolarWatch(price, colour, manufacturer, model, capacity);
+                    }
+                };
+            } catch (Exception e) {
+                printMessage(ERR_INVALID_VALUE + ": " + e.getMessage());
+            }
+        }
+    }
+
     public String readNonEmptyString(String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -74,7 +124,7 @@ public class ConsoleView {
                 System.out.print(prompt + " " + Arrays.toString(enumClass.getEnumConstants()) + ": ");
                 return Enum.valueOf(enumClass, scanner.nextLine().toUpperCase());
             } catch (IllegalArgumentException e) {
-                printMessage(Messages.ERR_INVALID_VALUE);
+                printMessage(ERR_INVALID_VALUE);
             }
         }
     }

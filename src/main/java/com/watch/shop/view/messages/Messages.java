@@ -1,7 +1,8 @@
 package com.watch.shop.view.messages;
 
 public class Messages {
-    private Messages() {}
+    private Messages() {
+    }
 
     public static final String MENU_HEADER = "\n=== Watch Shop ===";
     public static final String MENU_SHOW_ALL = "1. Show all watches";
@@ -29,4 +30,17 @@ public class Messages {
     public static final String ERR_BOOL_EXPECTED = "Enter true or false";
 
     public static final String STORE_EMPTY = "Store is empty";
+
+    public static final String UNKNOWN_COMMAND = "Unknown command";
+    public static final String WATCH_ADDED = "Watch added successfully!";
+    public static final String TOTAL_PRICE = "Total price: %.2f";
+
+    public static final String PROMPT_MODEL = "Enter model: ";
+    public static final String PROMPT_OS = "Operating System";
+    public static final String PROMPT_GPS = "GPS (true/false): ";
+    public static final String PROMPT_BATTERY = "Battery type";
+    public static final String PROMPT_POWER_RES = "Power reserve (hours): ";
+    public static final String PROMPT_MECHANISM = "Mechanism type";
+    public static final String PROMPT_CAPACITY = "Battery capacity (mAh): ";
+    public static final String PROMPT_MANUFACTURER = "Manufacturer";
 }
